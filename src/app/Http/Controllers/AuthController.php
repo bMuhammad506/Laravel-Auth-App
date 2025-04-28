@@ -25,8 +25,7 @@ class AuthController extends Controller
     {
         $user = $this->authService->register($request->validated());
 
-        Mail::to($user->email)->queue(new WelcomeMail($user)); //using queues and qworkers running this as BG task.
-        //Mail::to($user->email)->send(new WelcomeMail($user));// synchronously
+        Mail::to($user->email)->queue(new WelcomeMail($user));
 
         return response()->json([
             'data' => new UserResource($user),
@@ -51,8 +50,7 @@ class AuthController extends Controller
     {
         $otp = $this->authService->sendPasswordResetOtp($request->email);
 
-        Mail::to($request->email)->queue(new ResetPasswordOtpMail($otp));//using queues and qworkers running this as BG task.
-        //Mail::to($request->email)->send(new ResetPasswordOtpMail($otp)));// synchronously
+        Mail::to($request->email)->queue(new ResetPasswordOtpMail($otp));
 
         return response()->json([
             'message' => 'OTP has been sent to your email.',
